@@ -2,3 +2,7 @@ main: io.github.vhorvath2010.airidalechestshops.AiridaleChestShops
 name: AiridaleChestShops
 version: 1.0
 author: Vhbob
+api-version: 1.16
+depend:
+  - Essentials
+  - ItemBridge
