@@ -1,3 +1,9 @@
+# Below are the configurable messages for this plugin
+messages:
+  no_money: "&CYou do not have enough money!"
+  no_space: "&CYou do not have enough inventory space!"
+  no_items: "&CYou do not have enough of that item to sell!"
+
 # Below are the sign formats for shops.
 # There are four lines, use "" to signify an empty line
 # Placeholders are as follows:
