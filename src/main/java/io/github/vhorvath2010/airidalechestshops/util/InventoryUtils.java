@@ -18,17 +18,7 @@ public class InventoryUtils {
     public static int countItems(Inventory inventory, String target, boolean enchanted) {
         int count = 0;
         // Create list of items to check in
-        List<ItemStack> items = Arrays.asList(inventory.getContents());
-        if (inventory instanceof PlayerInventory) {
-            for (ItemStack armor : ((PlayerInventory) inventory).getArmorContents()) {
-                if (armor != null) {
-                    items.remove(armor);
-                }
-            }
-            if (((PlayerInventory) inventory).getItemInOffHand().getType() != Material.AIR) {
-                items.remove(((PlayerInventory) inventory).getItemInOffHand());
-            }
-        }
+        List<ItemStack> items = Arrays.asList(inventory.getStorageContents());
 
         // Count for custom items
         String customItem = getCUI(target);

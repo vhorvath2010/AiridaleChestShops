@@ -6,6 +6,9 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class ChestShop {
 
     public Sign sign;
@@ -21,6 +24,15 @@ public abstract class ChestShop {
     // This method will return true if the sign and chest for a shop still exist
     public boolean isValid() {
         return sign == null || chest == null;
+    }
+
+    // This method will set the lines of the shop to a certain config section
+    public void setSignState(String state) {
+        // Get/Set line data
+        List<String> lines = new ArrayList<>();
+        for (int lineNum = 0; lineNum < 4; ++lineNum) {
+            sign.setLine(lineNum, MessagingUtils.parsePlaceholders(MessagingUtils.getConfigMsg("formats." + state + "." + lineNum), value, transactionAmount, item, owner.getName()));
+        }
     }
 
 }

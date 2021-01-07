@@ -7,7 +7,7 @@ messages:
 # Below are the sign formats for shops.
 # There are four lines, use "" to signify an empty line
 # Placeholders are as follows:
-# %cost%: the cost/value of the item
+# %value%: the cost/value of the item
 # %item%: the item being sold/bought
 # %amt%:
 # %owner%: the owner's name
@@ -16,12 +16,12 @@ formats:
     1: "&a(Buy)"
     2: "%amt%"
     3: "%item%"
-    4: "%cost%"
+    4: "%value%"
   sell:
     1: "&c(Sell)"
     2: "%amt%"
     3: "%item%"
-    4: "%cost%"
+    4: "%value%"
   no_money:
     1: ""
     2: "%owner%"
