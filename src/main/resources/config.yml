@@ -13,12 +13,12 @@ messages:
 # %owner%: the owner's name
 formats:
   buy:
-    1: "(Buy)"
+    1: "&a(Buy)"
     2: "%amt%"
     3: "%item%"
     4: "%cost%"
   sell:
-    1: "(Sell)"
+    1: "&c(Sell)"
     2: "%amt%"
     3: "%item%"
     4: "%cost%"
@@ -33,8 +33,13 @@ formats:
     3: "&cis out of items!"
     4: ""
 
-# Below here are aliases for items. Remember, items are NOT case sensitive
+# Below here are aliases for items. Remember, items are NOT case sensitive, but
+# please use lowercase for aliases and uppercase for the material type / custom item
+# they represent.
 aliases:
   IRON_INGOT:
     - "iron ingot"
     - "ironingot"
+  DIAMOND_SWORD:
+    - "d sword"
+    - "d_sword"
