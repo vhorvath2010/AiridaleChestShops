@@ -7,16 +7,33 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class InventoryUtils {
 
     // This method counts the number of "target" items in "inventory"
     public static int countItems(Inventory inventory, String target, boolean enchanted) {
         int count = 0;
+        // Create list of items to check in
+        List<ItemStack> items = Arrays.asList(inventory.getContents());
+        if (inventory instanceof PlayerInventory) {
+            for (ItemStack armor : ((PlayerInventory) inventory).getArmorContents()) {
+                if (armor != null) {
+                    items.remove(armor);
+                }
+            }
+            if (((PlayerInventory) inventory).getItemInOffHand().getType() != Material.AIR) {
+                items.remove(((PlayerInventory) inventory).getItemInOffHand());
+            }
+        }
+
         // Count for custom items
         String customItem = getCUI(target);
         if (ItemBridge.getItemStack(customItem) != null) {
-            for (ItemStack item : inventory.getContents()) {
+            for (ItemStack item : items) {
                 if (item != null) {
                     ItemBridgeKey itemKey = ItemBridge.getItemKey(item);
                     if (itemKey.getItem() != null && itemKey.getItem().equalsIgnoreCase(customItem)) {
@@ -24,13 +41,13 @@ public class InventoryUtils {
                     }
                 }
             }
-            return count;
         }
+
         // Otherwise count for regular item
         else {
             Material search = getMaterial(target);
             if (search != null) {
-                for (ItemStack item : inventory.getContents()) {
+                for (ItemStack item : items) {
                     if (item != null) {
                         if (item.getType() == search) {
                             if (item.getEnchantments().size() == 0) {
@@ -46,8 +63,8 @@ public class InventoryUtils {
                     }
                 }
             }
-            return count;
         }
+        return count;
     }
 
     // This method will return a material based on its alias
