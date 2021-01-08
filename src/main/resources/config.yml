@@ -28,9 +28,14 @@ formats:
     3: "&cis out of money!"
     4: ""
   no_item:
+    1: "%&cowner%"
+    2: "&cis out of"
+    3: "&c%item%!"
+    4: ""
+  full:
     1: ""
-    2: "%owner%"
-    3: "&cis out of items!"
+    2: "&cThis shop is"
+    3: "&cfull!!!"
     4: ""
 
 # Below here are aliases for items. Remember, items are NOT case sensitive, but
