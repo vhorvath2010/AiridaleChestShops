@@ -4,12 +4,50 @@ import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Chest;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BuyChestShop extends ChestShop {
+
+    public BuyChestShop(Map<String, Object> serializedChestShop) {
+        // Validate chests and signs:
+        Location signLoc = (Location) serializedChestShop.get("signLoc");
+        Location chestLoc = (Location) serializedChestShop.get("chestLoc");
+        if (signLoc.getBlock().getType().toString().contains("_SIGN")) {
+            this.sign = (Sign) signLoc.getBlock();
+        }
+        if (chestLoc.getBlock().getType() == Material.CHEST) {
+            this.chest = (Chest) chestLoc.getBlock();
+        }
+        // Get other fields
+        this.item = (String) serializedChestShop.get("item");
+        this.transactionAmount = (int) serializedChestShop.get("transactionAmount");
+        this.value = (double) serializedChestShop.get("value");
+        this.owner = (Player) serializedChestShop.get("owner");
+        this.isEnchanted = (boolean) serializedChestShop.get("isEnchanted");
+    }
+
+    @Override
+    public Map<String, Object> serialize() {
+        HashMap<String, Object> mapSerializer = new HashMap<>();
+        // Add values
+        mapSerializer.put("signLoc", sign.getLocation());
+        mapSerializer.put("chestLoc", chest.getLocation());
+        mapSerializer.put("item", item);
+        mapSerializer.put("transactionAmount", transactionAmount);
+        mapSerializer.put("value", value);
+        mapSerializer.put("owner", owner);
+        mapSerializer.put("isEnchanted", isEnchanted);
+        return mapSerializer;
+    }
 
     @Override
     public void conductTransaction(Player buyer) throws UserDoesNotExistException, NoLoanPermittedException {

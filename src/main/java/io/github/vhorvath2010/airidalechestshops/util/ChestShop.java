@@ -4,12 +4,13 @@ import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ChestShop {
+public abstract class ChestShop implements ConfigurationSerializable {
 
     public Sign sign;
     public Chest chest;
