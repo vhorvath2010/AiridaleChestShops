@@ -1,5 +1,8 @@
 package io.github.vhorvath2010.airidalechestshops;
 
+import io.github.vhorvath2010.airidalechestshops.util.BuyChestShop;
+import io.github.vhorvath2010.airidalechestshops.util.SellChestShop;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class AiridaleChestShops extends JavaPlugin {
@@ -9,6 +12,8 @@ public class AiridaleChestShops extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
+        ConfigurationSerialization.registerClass(SellChestShop.class);
+        ConfigurationSerialization.registerClass(BuyChestShop.class);
         saveDefaultConfig();
     }
 
