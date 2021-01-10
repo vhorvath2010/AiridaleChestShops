@@ -3,6 +3,7 @@ package io.github.vhorvath2010.airidalechestshops.util;
 import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
+import io.github.vhorvath2010.airidalechestshops.AiridaleChestShops;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;

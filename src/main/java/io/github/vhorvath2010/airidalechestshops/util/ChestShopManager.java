@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
 
 public class ChestShopManager {
@@ -29,6 +30,10 @@ public class ChestShopManager {
 
     public ArrayList<ChestShop> getShops(UUID playerID) {
         return activeShops.get(playerID);
+    }
+
+    public Set<UUID> getIDS() {
+        return activeShops.keySet();
     }
 
     public void removeShop(ChestShop shop) {

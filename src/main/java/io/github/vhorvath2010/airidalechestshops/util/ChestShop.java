@@ -34,6 +34,10 @@ public abstract class ChestShop implements ConfigurationSerializable {
         return chest;
     }
 
+    public Sign getSign() {
+        return sign;
+    }
+
     // This method will update the sign states
     public abstract void updateSign(BigDecimal newBalance) throws UserDoesNotExistException;
 
