@@ -6,23 +6,26 @@ import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.Directional;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.SignChangeEvent;
 
 import java.util.UUID;
 
 public class CreateShopEvents implements Listener {
 
     @EventHandler
-    public void onCreate(BlockPlaceEvent e) {
-        if (!e.isCancelled() && e.getBlockPlaced().getState() instanceof Sign) {
-            Sign sign = (Sign) e.getBlockPlaced().getState();
+    public void onCreate(SignChangeEvent e) {
+        if (!e.isCancelled() && e.getBlock().getState() instanceof Sign) {
+            Sign sign = (Sign) e.getBlock().getState();
             // Check if placing on chest
-            if (e.getBlockAgainst().getState() instanceof Chest) {
-                Chest chest = (Chest) e.getBlockAgainst().getState();
+            Block placedOn = sign.getBlock().getRelative(((Directional) sign.getBlockData()).getFacing().getOppositeFace());
+            if (placedOn.getState() instanceof Chest) {
+                Chest chest = (Chest) placedOn.getState();
                 // Try to create shops
                 String item = sign.getLine(2);
+                e.getPlayer().sendMessage(item);
                 boolean isEnchanted = item.contains("[E] ");
                 item = item.replace("[E] ", "");
                 if (isNumeric(sign.getLine(1)) && isNumeric(sign.getLine(3)) &&
