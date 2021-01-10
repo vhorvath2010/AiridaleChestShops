@@ -16,7 +16,7 @@ public class CreateShopEvents implements Listener {
 
     @EventHandler
     public void onCreate(BlockPlaceEvent e) {
-        if (e.getBlockPlaced().getState() instanceof Sign) {
+        if (!e.isCancelled() && e.getBlockPlaced().getState() instanceof Sign) {
             Sign sign = (Sign) e.getBlockPlaced().getState();
             // Check if placing on chest
             if (e.getBlockAgainst().getState() instanceof Chest) {

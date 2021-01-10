@@ -16,7 +16,7 @@ public class ProtectionEvents implements Listener {
     @EventHandler
     public void breakChest(BlockBreakEvent e) {
         Block broken = e.getBlock();
-        if (broken.getType().toString().contains("_SIGN") || e.getBlock().getType() == Material.CHEST) {
+        if (!e.isCancelled() && broken.getType().toString().contains("_SIGN") || e.getBlock().getType() == Material.CHEST) {
             // Check all sign shops for consequences
             ArrayList<ChestShop> toRemove = new ArrayList<>();
             for (UUID shopPlayerID : AiridaleChestShops.getPlugin().getChestShopManager().getIDS()) {
