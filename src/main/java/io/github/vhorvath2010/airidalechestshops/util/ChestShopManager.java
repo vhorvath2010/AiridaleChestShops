@@ -77,8 +77,10 @@ public class ChestShopManager {
             for (String IDString : buyConfig.getConfigurationSection("shops").getKeys(false)) {
                 // Register players shops
                 ArrayList<BuyChestShop> buyShops = (ArrayList<BuyChestShop>) buyConfig.get("shops." + IDString);
-                for (ChestShop shop : buyShops) {
-                    registerShop(shop);
+                if (buyShops != null) {
+                    for (ChestShop shop : buyShops) {
+                        registerShop(shop);
+                    }
                 }
             }
         }
@@ -88,8 +90,10 @@ public class ChestShopManager {
             for (String IDString : sellConfig.getConfigurationSection("shops").getKeys(false)) {
                 // Register players shops
                 ArrayList<SellChestShop> sellShops = (ArrayList<SellChestShop>) sellConfig.get("shops." + IDString);
-                for (ChestShop shop : sellShops) {
-                    registerShop(shop);
+                if (sellShops != null) {
+                    for (ChestShop shop : sellShops) {
+                        registerShop(shop);
+                    }
                 }
             }
         }

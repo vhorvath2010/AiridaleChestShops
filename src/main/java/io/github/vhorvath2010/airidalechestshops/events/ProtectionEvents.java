@@ -23,7 +23,7 @@ public class ProtectionEvents implements Listener {
                 // Stop break if not owner
                 if (!e.getPlayer().getUniqueId().equals(shopPlayerID)) {
                     for (ChestShop shop : AiridaleChestShops.getPlugin().getChestShopManager().getShops(shopPlayerID)) {
-                        if (shop.getChest().equals(broken) || shop.getSign() == broken) {
+                        if (shop.getChest().equals(broken.getState()) || shop.getSign().equals(broken.getState())) {
                             e.setCancelled(true);
                             return;
                         }
@@ -31,7 +31,7 @@ public class ProtectionEvents implements Listener {
                 } else {
                     // Otherwise, unregister shop
                     for (ChestShop shop : AiridaleChestShops.getPlugin().getChestShopManager().getShops(shopPlayerID)) {
-                        if (shop.getChest().equals(broken) || shop.getSign() == broken) {
+                        if (shop.getChest().equals(broken.getState()) || shop.getSign().equals(broken.getState())) {
                             toRemove.add(shop);
                         }
                     }

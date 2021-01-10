@@ -2,6 +2,7 @@ package io.github.vhorvath2010.airidalechestshops;
 
 import io.github.vhorvath2010.airidalechestshops.events.BalanceEvents;
 import io.github.vhorvath2010.airidalechestshops.events.ChestEvents;
+import io.github.vhorvath2010.airidalechestshops.events.CreateShopEvents;
 import io.github.vhorvath2010.airidalechestshops.util.BuyChestShop;
 import io.github.vhorvath2010.airidalechestshops.util.ChestShopManager;
 import io.github.vhorvath2010.airidalechestshops.util.SellChestShop;
@@ -26,6 +27,7 @@ public class AiridaleChestShops extends JavaPlugin {
         // Register events
         Bukkit.getPluginManager().registerEvents(new BalanceEvents(), this);
         Bukkit.getPluginManager().registerEvents(new ChestEvents(), this);
+        Bukkit.getPluginManager().registerEvents(new CreateShopEvents(), this);
     }
 
     public static AiridaleChestShops getPlugin() {

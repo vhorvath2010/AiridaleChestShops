@@ -3,7 +3,6 @@ package io.github.vhorvath2010.airidalechestshops.util;
 import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
-import io.github.vhorvath2010.airidalechestshops.AiridaleChestShops;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,6 +17,16 @@ import java.util.Map;
 import java.util.UUID;
 
 public class SellChestShop extends ChestShop {
+
+    public SellChestShop(Sign sign, Chest chest, String item, int amt, double value, UUID owner, boolean enchanted) {
+        this.sign = sign;
+        this.chest = chest;
+        this.item = item;
+        this.transactionAmount = amt;
+        this.value = value;
+        this.owner = owner;
+        this.isEnchanted = enchanted;
+    }
 
     public SellChestShop(Map<String, Object> serializedChestShop) {
         // Validate chests and signs:

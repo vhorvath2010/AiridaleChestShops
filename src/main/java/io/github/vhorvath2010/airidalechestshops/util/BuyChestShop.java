@@ -18,6 +18,16 @@ import java.util.UUID;
 
 public class BuyChestShop extends ChestShop {
 
+    public BuyChestShop(Sign sign, Chest chest, String item, int amt, double value, UUID owner, boolean enchanted) {
+        this.sign = sign;
+        this.chest = chest;
+        this.item = item;
+        this.transactionAmount = amt;
+        this.value = value;
+        this.owner = owner;
+        this.isEnchanted = enchanted;
+    }
+
     public BuyChestShop(Map<String, Object> serializedChestShop) {
         // Validate chests and signs:
         Location signLoc = (Location) serializedChestShop.get("signLoc");
