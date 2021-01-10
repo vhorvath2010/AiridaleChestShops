@@ -8,6 +8,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +29,13 @@ public abstract class ChestShop implements ConfigurationSerializable {
     public boolean isValid() {
         return sign == null || chest == null;
     }
+
+    public Chest getChest() {
+        return chest;
+    }
+
+    // This method will update the sign states
+    public abstract void updateSign(BigDecimal newBalance) throws UserDoesNotExistException;
 
     // This method will set the lines of the shop to a certain config section
     public void setSignState(String state) {

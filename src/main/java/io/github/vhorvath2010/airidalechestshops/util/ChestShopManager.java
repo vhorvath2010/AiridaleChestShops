@@ -27,6 +27,10 @@ public class ChestShopManager {
         activeShops.put(shop.owner, shops);
     }
 
+    public ArrayList<ChestShop> getShops(UUID playerID) {
+        return activeShops.get(playerID);
+    }
+
     public void removeShop(ChestShop shop) {
         if (activeShops.containsKey(shop.owner)) {
             activeShops.get(shop.owner).remove(shop);

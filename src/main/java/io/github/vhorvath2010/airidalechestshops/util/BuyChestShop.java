@@ -74,6 +74,14 @@ public class BuyChestShop extends ChestShop {
         } else {
             buyer.sendMessage(ChatColor.RED + "You do not have enough money!");
         }
+    }
 
+    @Override
+    public void updateSign(BigDecimal newBalance) {
+        if (InventoryUtils.countItems(chest.getBlockInventory(), item, isEnchanted) < transactionAmount) {
+            setSignState("no_item");
+            return;
+        }
+        setSignState("buy");
     }
 }

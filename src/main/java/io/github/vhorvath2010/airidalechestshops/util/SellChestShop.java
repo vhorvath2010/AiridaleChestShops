@@ -55,7 +55,7 @@ public class SellChestShop extends ChestShop {
         Inventory sellerInv = seller.getInventory();
         Inventory shopInv = chest.getBlockInventory();
         // Ensure owner has enough money
-        if (Economy.getMoneyExact(owner).compareTo(BigDecimal.valueOf(value)) > 0) {
+        if (Economy.getMoneyExact(owner).compareTo(BigDecimal.valueOf(value)) >= 0) {
             // Ensure chest has space
             if (InventoryUtils.hasEmpty(shopInv.getStorageContents())) {
                 // Ensure player has enough items
@@ -75,4 +75,18 @@ public class SellChestShop extends ChestShop {
             setSignState("no_money");
         }
     }
+
+    @Override
+    public void updateSign(BigDecimal newBalance) throws UserDoesNotExistException {
+        if (newBalance.compareTo(BigDecimal.valueOf(value)) < 0) {
+            setSignState("no_money");
+            return;
+        }
+        if (!InventoryUtils.hasEmpty(chest.getBlockInventory().getStorageContents())) {
+            setSignState("full");
+            return;
+        }
+        setSignState("sell");
+    }
+
 }
