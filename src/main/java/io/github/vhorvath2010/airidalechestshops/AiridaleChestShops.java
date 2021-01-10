@@ -10,6 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+
 public class AiridaleChestShops extends JavaPlugin {
 
     private static AiridaleChestShops plugin;
@@ -28,6 +30,15 @@ public class AiridaleChestShops extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new BalanceEvents(), this);
         Bukkit.getPluginManager().registerEvents(new ChestEvents(), this);
         Bukkit.getPluginManager().registerEvents(new CreateShopEvents(), this);
+    }
+
+    @Override
+    public void onDisable() {
+        try {
+            chestShopManager.saveShops();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static AiridaleChestShops getPlugin() {
