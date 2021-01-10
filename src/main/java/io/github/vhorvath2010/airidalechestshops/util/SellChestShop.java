@@ -14,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class SellChestShop extends ChestShop {
 
@@ -31,7 +32,7 @@ public class SellChestShop extends ChestShop {
         this.item = (String) serializedChestShop.get("item");
         this.transactionAmount = (int) serializedChestShop.get("transactionAmount");
         this.value = (double) serializedChestShop.get("value");
-        this.owner = (Player) serializedChestShop.get("owner");
+        this.owner = UUID.fromString((String) serializedChestShop.get("owner"));
         this.isEnchanted = (boolean) serializedChestShop.get("isEnchanted");
     }
 
@@ -44,7 +45,7 @@ public class SellChestShop extends ChestShop {
         mapSerializer.put("item", item);
         mapSerializer.put("transactionAmount", transactionAmount);
         mapSerializer.put("value", value);
-        mapSerializer.put("owner", owner);
+        mapSerializer.put("owner", owner.toString());
         mapSerializer.put("isEnchanted", isEnchanted);
         return mapSerializer;
     }
@@ -54,13 +55,13 @@ public class SellChestShop extends ChestShop {
         Inventory sellerInv = seller.getInventory();
         Inventory shopInv = chest.getBlockInventory();
         // Ensure owner has enough money
-        if (Economy.getMoneyExact(owner.getUniqueId()).compareTo(BigDecimal.valueOf(value)) > 0) {
+        if (Economy.getMoneyExact(owner).compareTo(BigDecimal.valueOf(value)) > 0) {
             // Ensure chest has space
             if (InventoryUtils.hasEmpty(shopInv.getStorageContents())) {
                 // Ensure player has enough items
                 if (InventoryUtils.countItems(sellerInv, item, isEnchanted) >= transactionAmount) {
                     // Conduct transaction
-                    Economy.subtract(owner.getUniqueId(), BigDecimal.valueOf(value));
+                    Economy.subtract(owner, BigDecimal.valueOf(value));
                     Economy.add(seller.getUniqueId(), BigDecimal.valueOf(value));
                     InventoryUtils.transferItems(sellerInv, shopInv, item, isEnchanted, transactionAmount);
                     seller.sendMessage(ChatColor.GREEN + "Purchase complete!");

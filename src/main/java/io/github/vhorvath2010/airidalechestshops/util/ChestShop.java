@@ -2,6 +2,7 @@ package io.github.vhorvath2010.airidalechestshops.util;
 
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -9,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class ChestShop implements ConfigurationSerializable {
 
@@ -17,7 +19,7 @@ public abstract class ChestShop implements ConfigurationSerializable {
     public String item;
     public int transactionAmount;
     public double value;
-    public Player owner;
+    public UUID owner;
     public boolean isEnchanted;
 
     public abstract void conductTransaction(Player player) throws UserDoesNotExistException, NoLoanPermittedException;
@@ -32,7 +34,7 @@ public abstract class ChestShop implements ConfigurationSerializable {
         // Get/Set line data
         List<String> lines = new ArrayList<>();
         for (int lineNum = 0; lineNum < 4; ++lineNum) {
-            sign.setLine(lineNum, MessagingUtils.parsePlaceholders(MessagingUtils.getConfigMsg("formats." + state + "." + lineNum), value, transactionAmount, item, owner.getName()));
+            sign.setLine(lineNum, MessagingUtils.parsePlaceholders(MessagingUtils.getConfigMsg("formats." + state + "." + lineNum), value, transactionAmount, item, Bukkit.getOfflinePlayer(owner).getName()));
         }
     }
 

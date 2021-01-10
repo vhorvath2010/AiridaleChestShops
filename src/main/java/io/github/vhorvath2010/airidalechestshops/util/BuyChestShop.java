@@ -14,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class BuyChestShop extends ChestShop {
 
@@ -31,7 +32,7 @@ public class BuyChestShop extends ChestShop {
         this.item = (String) serializedChestShop.get("item");
         this.transactionAmount = (int) serializedChestShop.get("transactionAmount");
         this.value = (double) serializedChestShop.get("value");
-        this.owner = (Player) serializedChestShop.get("owner");
+        this.owner = UUID.fromString((String) serializedChestShop.get("owner"));
         this.isEnchanted = (boolean) serializedChestShop.get("isEnchanted");
     }
 
@@ -44,7 +45,7 @@ public class BuyChestShop extends ChestShop {
         mapSerializer.put("item", item);
         mapSerializer.put("transactionAmount", transactionAmount);
         mapSerializer.put("value", value);
-        mapSerializer.put("owner", owner);
+        mapSerializer.put("owner", owner.toString());
         mapSerializer.put("isEnchanted", isEnchanted);
         return mapSerializer;
     }
@@ -61,7 +62,7 @@ public class BuyChestShop extends ChestShop {
                 if (InventoryUtils.hasEmpty(buyer.getInventory().getStorageContents())) {
                     // Conduct transaction
                     Economy.subtract(buyer.getUniqueId(), BigDecimal.valueOf(value));
-                    Economy.add(owner.getUniqueId(), BigDecimal.valueOf(value));
+                    Economy.add(owner, BigDecimal.valueOf(value));
                     InventoryUtils.transferItems(shopInv, buyerInv, item, isEnchanted, transactionAmount);
                     buyer.sendMessage(ChatColor.GREEN + "Purchase complete!");
                 } else {
