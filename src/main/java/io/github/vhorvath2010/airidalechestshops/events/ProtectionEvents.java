@@ -16,14 +16,14 @@ public class ProtectionEvents implements Listener {
     @EventHandler
     public void breakChest(BlockBreakEvent e) {
         Block broken = e.getBlock();
-        if (!e.isCancelled() && broken.getType().toString().contains("_SIGN") || e.getBlock().getType() == Material.CHEST) {
+        if (!e.isCancelled()) {
             // Check all sign shops for consequences
             ArrayList<ChestShop> toRemove = new ArrayList<>();
             for (UUID shopPlayerID : AiridaleChestShops.getPlugin().getChestShopManager().getIDS()) {
                 // Stop break if not owner
                 if (!e.getPlayer().getUniqueId().equals(shopPlayerID)) {
                     for (ChestShop shop : AiridaleChestShops.getPlugin().getChestShopManager().getShops(shopPlayerID)) {
-                        if (shop.getChest().equals(broken.getState()) || shop.getSign().equals(broken.getState())) {
+                        if (shop.getContainer().equals(broken) || shop.getSign().getBlock().equals(broken)) {
                             e.setCancelled(true);
                             return;
                         }
@@ -31,7 +31,7 @@ public class ProtectionEvents implements Listener {
                 } else {
                     // Otherwise, unregister shop
                     for (ChestShop shop : AiridaleChestShops.getPlugin().getChestShopManager().getShops(shopPlayerID)) {
-                        if (shop.getChest().equals(broken.getState()) || shop.getSign().equals(broken.getState())) {
+                        if (shop.getContainer().equals(broken) || shop.getSign().getBlock().equals(broken)) {
                             toRemove.add(shop);
                         }
                     }

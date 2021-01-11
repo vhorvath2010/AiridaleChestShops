@@ -5,6 +5,7 @@ import com.earth2me.essentials.api.UserDoesNotExistException;
 import io.github.vhorvath2010.airidalechestshops.AiridaleChestShops;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.block.Barrel;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
@@ -38,6 +39,17 @@ public abstract class ChestShop implements ConfigurationSerializable {
             return (Chest) chest.getState();
         }
         return null;
+    }
+
+    public Barrel getBarrel() {
+        if (chest.getState() instanceof Barrel) {
+            return (Barrel) chest.getState();
+        }
+        return null;
+    }
+
+    public Block getContainer() {
+        return chest;
     }
 
     public Sign getSign() {

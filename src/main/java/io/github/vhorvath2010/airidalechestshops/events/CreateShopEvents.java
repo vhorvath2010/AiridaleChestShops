@@ -7,6 +7,7 @@ import io.github.vhorvath2010.airidalechestshops.AiridaleChestShops;
 import io.github.vhorvath2010.airidalechestshops.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.block.Barrel;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
@@ -36,8 +37,7 @@ public class CreateShopEvents implements Listener {
             if (sign.getBlockData() instanceof Directional) {
                  placedOn = sign.getBlock().getRelative(((Directional) sign.getBlockData()).getFacing().getOppositeFace());
             }
-            if (placedOn.getState() instanceof Chest && e.getLine(2) != null) {
-                Chest chest = (Chest) placedOn.getState();
+            if ((placedOn.getState() instanceof Chest || placedOn.getState() instanceof Barrel) && e.getLine(2) != null) {
                 // Try to create shops
                 String item = e.getLine(2);
                 boolean isEnchanted = item.contains("E ");
@@ -52,7 +52,7 @@ public class CreateShopEvents implements Listener {
                     for (UUID ownerID : chestShopManager.getIDS()) {
                         if (!ownerID.equals(placerID)) {
                             for (ChestShop shop : chestShopManager.getShops(ownerID)) {
-                                if (shop.getChest().equals(chest)) {
+                                if (shop.getContainer().equals(placedOn)) {
                                     e.setCancelled(true);
                                     return;
                                 }
@@ -73,7 +73,7 @@ public class CreateShopEvents implements Listener {
                     }
                     // Try to create buy shop
                     if (e.getLine(0).equalsIgnoreCase("(buy)")) {
-                        BuyChestShop shop = new BuyChestShop(sign.getBlock(), chest.getBlock(), item, amt, value, placerID, isEnchanted);
+                        BuyChestShop shop = new BuyChestShop(sign.getBlock(), placedOn, item, amt, value, placerID, isEnchanted);
                         chestShopManager.registerShop(shop);
                         new BukkitRunnable() {
                             @Override
@@ -87,7 +87,7 @@ public class CreateShopEvents implements Listener {
                         }.runTaskLater(AiridaleChestShops.getPlugin(), 10L);
                         e.getPlayer().sendMessage(ChatColor.GREEN + "Chest shop created!");
                     } else if (e.getLine(0).equalsIgnoreCase("(sell)")) {
-                        SellChestShop shop = new SellChestShop(sign.getBlock(), chest.getBlock(), item, amt, value, placerID, isEnchanted);
+                        SellChestShop shop = new SellChestShop(sign.getBlock(), placedOn, item, amt, value, placerID, isEnchanted);
                         chestShopManager.registerShop(shop);
                         new BukkitRunnable() {
                             @Override

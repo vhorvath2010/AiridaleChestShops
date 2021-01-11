@@ -64,7 +64,12 @@ public class BuyChestShop extends ChestShop {
     @Override
     public void conductTransaction(Player buyer) throws UserDoesNotExistException, NoLoanPermittedException {
         Inventory buyerInv = buyer.getInventory();
-        Inventory shopInv = getChest().getInventory();
+        Inventory shopInv;
+        if (getChest() != null) {
+            shopInv = getChest().getInventory();
+        } else {
+            shopInv = getBarrel().getInventory();
+        }
         // Ensure player has enough money
         if (Economy.getMoneyExact(buyer.getUniqueId()).compareTo(BigDecimal.valueOf(value)) > 0) {
             // Ensure shop has items to sell
@@ -89,7 +94,13 @@ public class BuyChestShop extends ChestShop {
 
     @Override
     public void updateSign(BigDecimal newBalance) {
-        if (InventoryUtils.countItems(getChest().getInventory(), item, isEnchanted) < transactionAmount) {
+        Inventory shopInv;
+        if (getChest() != null) {
+            shopInv = getChest().getInventory();
+        } else {
+            shopInv = getBarrel().getInventory();
+        }
+        if (InventoryUtils.countItems(shopInv, item, isEnchanted) < transactionAmount) {
             setSignState("no_item");
             return;
         }
