@@ -98,6 +98,10 @@ public class SellChestShop extends ChestShop {
             setSignState("full");
             return;
         }
+        if (isEnchanted) {
+            setSignState("sell_ench");
+            return;
+        }
         setSignState("sell");
     }
 

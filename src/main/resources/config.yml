@@ -17,10 +17,20 @@ formats:
     1: "%amt%"
     2: "%item%"
     3: "$%value%"
+  buy_ench:
+    0: "&a(Buy)"
+    1: "%amt%"
+    2: "&b%item%"
+    3: "$%value%"
   sell:
     0: "&c(Sell)"
     1: "%amt%"
     2: "%item%"
+    3: "$%value%"
+  sell_ench:
+    0: "&c(Sell)"
+    1: "%amt%"
+    2: "&b%item%"
     3: "$%value%"
   no_money:
     0: ""
