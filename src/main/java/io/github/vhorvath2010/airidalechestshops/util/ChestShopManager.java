@@ -1,6 +1,7 @@
 package io.github.vhorvath2010.airidalechestshops.util;
 
 import io.github.vhorvath2010.airidalechestshops.AiridaleChestShops;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -68,21 +69,19 @@ public class ChestShopManager {
         sellConfig.save(sellShopFile);
     }
 
-    public void loadShops() {
+    public void loadShops() throws IOException, InvalidConfigurationException {
         File buyShopFile = new File(AiridaleChestShops.getPlugin().getDataFolder(), "buyShops.yml");
         File sellShopFile = new File(AiridaleChestShops.getPlugin().getDataFolder(), "sellShops.yml");
         // Load buy shops
         if (buyShopFile.exists()) {
             YamlConfiguration buyConfig = new YamlConfiguration();
-            if (buyConfig.contains("shops")) {
+            buyConfig.load(buyShopFile);
+            if (buyConfig.getConfigurationSection("shops") != null) {
                 for (String IDString : buyConfig.getConfigurationSection("shops").getKeys(false)) {
                     // Register players shops
                     ArrayList<BuyChestShop> buyShops = (ArrayList<BuyChestShop>) buyConfig.get("shops." + IDString);
-                    System.out.println(IDString + " has " + buyShops.size() + " shops");
-                    if (buyShops != null) {
-                        for (ChestShop shop : buyShops) {
-                            registerShop(shop);
-                        }
+                    for (ChestShop shop : buyShops) {
+                        registerShop(shop);
                     }
                 }
             }
@@ -90,14 +89,13 @@ public class ChestShopManager {
         // Load sell shops
         if (sellShopFile.exists()) {
             YamlConfiguration sellConfig = new YamlConfiguration();
-            if (sellConfig.getConfigurationSection("shops") != null) {
-                for (String IDString : sellConfig.getConfigurationSection("shops").getKeys(false)) {
-                    // Register players shops
-                    ArrayList<SellChestShop> sellShops = (ArrayList<SellChestShop>) sellConfig.get("shops." + IDString);
-                    if (sellShops != null) {
-                        for (ChestShop shop : sellShops) {
-                            registerShop(shop);
-                        }
+            sellConfig.load(sellShopFile);
+            for (String IDString : sellConfig.getConfigurationSection("shops").getKeys(false)) {
+                // Register players shops
+                ArrayList<SellChestShop> sellShops = (ArrayList<SellChestShop>) sellConfig.get("shops." + IDString);
+                if (sellShops != null) {
+                    for (ChestShop shop : sellShops) {
+                        registerShop(shop);
                     }
                 }
             }

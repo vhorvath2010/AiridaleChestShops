@@ -3,10 +3,12 @@ package io.github.vhorvath2010.airidalechestshops;
 import io.github.vhorvath2010.airidalechestshops.events.BalanceEvents;
 import io.github.vhorvath2010.airidalechestshops.events.ChestEvents;
 import io.github.vhorvath2010.airidalechestshops.events.CreateShopEvents;
+import io.github.vhorvath2010.airidalechestshops.events.ProtectionEvents;
 import io.github.vhorvath2010.airidalechestshops.util.BuyChestShop;
 import io.github.vhorvath2010.airidalechestshops.util.ChestShopManager;
 import io.github.vhorvath2010.airidalechestshops.util.SellChestShop;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,11 +27,16 @@ public class AiridaleChestShops extends JavaPlugin {
         saveDefaultConfig();
         // Load chest shops
         chestShopManager = new ChestShopManager();
-        chestShopManager.loadShops();
+        try {
+            chestShopManager.loadShops();
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
         // Register events
         Bukkit.getPluginManager().registerEvents(new BalanceEvents(), this);
         Bukkit.getPluginManager().registerEvents(new ChestEvents(), this);
         Bukkit.getPluginManager().registerEvents(new CreateShopEvents(), this);
+        Bukkit.getPluginManager().registerEvents(new ProtectionEvents(), this);
     }
 
     @Override

@@ -22,7 +22,7 @@ public class ChestEvents implements Listener {
         ArrayList<ChestShop> shops = AiridaleChestShops.getPlugin().getChestShopManager().getShops(playerID);
         if (shops != null) {
             for (ChestShop shop : shops) {
-                if (shop.getChest().getBlockInventory().equals(shopInv)) {
+                if (shop.getChest().getInventory().equals(shopInv)) {
                     shop.updateSign(Economy.getMoneyExact(playerID));
                 }
             }

@@ -2,7 +2,9 @@ package io.github.vhorvath2010.airidalechestshops.util;
 
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
+import io.github.vhorvath2010.airidalechestshops.AiridaleChestShops;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
@@ -54,10 +56,9 @@ public abstract class ChestShop implements ConfigurationSerializable {
         List<String> lines = new ArrayList<>();
         Sign sign = getSign();
         for (int lineNum = 0; lineNum < 4; ++lineNum) {
-            String lineMsg = MessagingUtils.parsePlaceholders(MessagingUtils.getConfigMsg("formats." + state + "." + lineNum), value, transactionAmount, item, Bukkit.getOfflinePlayer(owner).getName());
+            String lineMsg = MessagingUtils.parsePlaceholders(AiridaleChestShops.getPlugin().getConfig().getString("formats." + state + "." + lineNum), value, transactionAmount, item, Bukkit.getOfflinePlayer(owner).getName());
+            lineMsg = ChatColor.translateAlternateColorCodes('&', lineMsg);
             sign.setLine(lineNum, lineMsg);
-            System.out.println(lineNum + ": " + lineMsg);
-            System.out.println(sign.getLine(lineNum));
         }
         sign.update();
     }

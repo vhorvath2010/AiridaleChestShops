@@ -28,7 +28,7 @@ formats:
     2: "&cis out of money!"
     3: ""
   no_item:
-    0: "%&cowner%"
+    0: "&c%owner%"
     1: "&cis out of"
     2: "&c%item%!"
     3: ""

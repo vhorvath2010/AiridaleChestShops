@@ -4,6 +4,7 @@ import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import io.github.vhorvath2010.airidalechestshops.AiridaleChestShops;
 import io.github.vhorvath2010.airidalechestshops.util.*;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -12,13 +13,14 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
 
 public class CreateShopEvents implements Listener {
 
     @EventHandler
-    public void onCreate(SignChangeEvent e) throws UserDoesNotExistException {
+    public void onCreate(SignChangeEvent e) {
         Block signBlock = e.getBlock();
         if (!e.isCancelled() && signBlock.getState() instanceof Sign) {
             // Check if all lines are present
@@ -60,12 +62,30 @@ public class CreateShopEvents implements Listener {
                     if (e.getLine(0).equalsIgnoreCase("(buy)")) {
                         BuyChestShop shop = new BuyChestShop(sign.getBlock(), chest.getBlock(), item, amt, value, placerID, isEnchanted);
                         chestShopManager.registerShop(shop);
-                        shop.updateSign(Economy.getMoneyExact(placerID));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    shop.updateSign(Economy.getMoneyExact(placerID));
+                                } catch (UserDoesNotExistException userDoesNotExistException) {
+                                    userDoesNotExistException.printStackTrace();
+                                }
+                            }
+                        }.runTaskLater(AiridaleChestShops.getPlugin(), 10L);
                         e.getPlayer().sendMessage(ChatColor.GREEN + "Chest shop created!");
                     } else if (e.getLine(0).equalsIgnoreCase("(sell)")) {
                         SellChestShop shop = new SellChestShop(sign.getBlock(), chest.getBlock(), item, amt, value, placerID, isEnchanted);
                         chestShopManager.registerShop(shop);
-                        shop.updateSign(Economy.getMoneyExact(placerID));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    shop.updateSign(Economy.getMoneyExact(placerID));
+                                } catch (UserDoesNotExistException userDoesNotExistException) {
+                                    userDoesNotExistException.printStackTrace();
+                                }
+                            }
+                        }.runTaskLater(AiridaleChestShops.getPlugin(), 10L);
                         e.getPlayer().sendMessage(ChatColor.GREEN + "Chest shop created!");
                     }
                 }
