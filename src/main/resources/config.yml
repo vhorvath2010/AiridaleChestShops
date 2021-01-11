@@ -16,12 +16,12 @@ formats:
     0: "&a(Buy)"
     1: "%amt%"
     2: "%item%"
-    3: "%value%"
+    3: "$%value%"
   sell:
     0: "&c(Sell)"
     1: "%amt%"
     2: "%item%"
-    3: "%value%"
+    3: "$%value%"
   no_money:
     0: ""
     1: "%owner%"
