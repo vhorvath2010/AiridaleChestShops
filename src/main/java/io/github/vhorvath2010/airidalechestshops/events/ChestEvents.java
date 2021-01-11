@@ -16,16 +16,12 @@ public class ChestEvents implements Listener {
 
     @EventHandler
     public void onChestChange(InventoryCloseEvent e) throws UserDoesNotExistException {
-        Inventory shopInv = e.getPlayer().getOpenInventory().getTopInventory();
         UUID playerID = e.getPlayer().getUniqueId();
         // Check for shops with this inventory
         ArrayList<ChestShop> shops = AiridaleChestShops.getPlugin().getChestShopManager().getShops(playerID);
         if (shops != null) {
             for (ChestShop shop : shops) {
-                e.getPlayer().sendMessage(shop.getChest().getInventory().equals(shopInv) + "");
-                if (shop.getChest().getInventory().equals(shopInv)) {
-                    shop.updateSign(Economy.getMoneyExact(playerID));
-                }
+                shop.updateSign(Economy.getMoneyExact(playerID));
             }
         }
     }
