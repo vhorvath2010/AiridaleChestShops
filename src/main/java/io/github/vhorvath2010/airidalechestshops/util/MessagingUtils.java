@@ -7,7 +7,10 @@ public class MessagingUtils {
 
     public static String getConfigMsg(String path) {
         String msg = AiridaleChestShops.getPlugin().getConfig().getString(path);
-        return ChatColor.translateAlternateColorCodes('&', msg);
+        if (msg != null) {
+            return ChatColor.translateAlternateColorCodes('&', msg);
+        }
+        return null;
     }
 
     public static String parsePlaceholders(String text, double value, int amt, String item, String ownerName) {

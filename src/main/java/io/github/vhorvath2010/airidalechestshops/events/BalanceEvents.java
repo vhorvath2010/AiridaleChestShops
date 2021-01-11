@@ -16,8 +16,10 @@ public class BalanceEvents implements Listener {
     public void onBalChange(UserBalanceUpdateEvent e) throws UserDoesNotExistException {
         UUID playerID = e.getPlayer().getUniqueId();
         ArrayList<ChestShop> shops = AiridaleChestShops.getPlugin().getChestShopManager().getShops(playerID);
-        for (ChestShop shop : shops) {
-            shop.updateSign(e.getNewBalance());
+        if (shops != null) {
+            for (ChestShop shop : shops) {
+                shop.updateSign(e.getNewBalance());
+            }
         }
     }
 

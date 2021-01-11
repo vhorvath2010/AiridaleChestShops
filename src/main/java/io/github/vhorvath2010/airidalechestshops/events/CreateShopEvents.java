@@ -1,5 +1,7 @@
 package io.github.vhorvath2010.airidalechestshops.events;
 
+import com.earth2me.essentials.api.Economy;
+import com.earth2me.essentials.api.UserDoesNotExistException;
 import io.github.vhorvath2010.airidalechestshops.AiridaleChestShops;
 import io.github.vhorvath2010.airidalechestshops.util.*;
 import org.bukkit.ChatColor;
@@ -16,26 +18,36 @@ import java.util.UUID;
 public class CreateShopEvents implements Listener {
 
     @EventHandler
-    public void onCreate(SignChangeEvent e) {
-        if (!e.isCancelled() && e.getBlock().getState() instanceof Sign) {
-            Sign sign = (Sign) e.getBlock().getState();
+    public void onCreate(SignChangeEvent e) throws UserDoesNotExistException {
+        Block signBlock = e.getBlock();
+        if (!e.isCancelled() && signBlock.getState() instanceof Sign) {
+            // Check if all lines are present
+            for (int i = 0; i < 4; i++) {
+                if (e.getLine(i) == null) {
+                    return;
+                }
+            }
+            Sign sign = (Sign) signBlock.getState();
             // Check if placing on chest
-            Block placedOn = sign.getBlock().getRelative(((Directional) sign.getBlockData()).getFacing().getOppositeFace());
+            Block placedOn = signBlock.getRelative(0, -1, 0);
+            if (sign.getBlockData() instanceof Directional) {
+                 placedOn = sign.getBlock().getRelative(((Directional) sign.getBlockData()).getFacing().getOppositeFace());
+            }
             if (placedOn.getState() instanceof Chest) {
                 Chest chest = (Chest) placedOn.getState();
                 // Try to create shops
-                String item = sign.getLine(2);
-                e.getPlayer().sendMessage(item);
+                String item = e.getLine(2);
                 boolean isEnchanted = item.contains("[E] ");
                 item = item.replace("[E] ", "");
-                if (isNumeric(sign.getLine(1)) && isNumeric(sign.getLine(3)) &&
+                if (isNumeric(e.getLine(1)) && isNumeric(e.getLine(3)) &&
                         (InventoryUtils.getMaterial(item) != null || InventoryUtils.getCUI(item) != null)) {
                     ChestShopManager chestShopManager = AiridaleChestShops.getPlugin().getChestShopManager();
-                    int amt = (int) Double.parseDouble(sign.getLine(1));
-                    double value = Double.parseDouble(sign.getLine(3));
+                    int amt = (int) Double.parseDouble(e.getLine(1));
+                    double value = Double.parseDouble(e.getLine(3));
                     // Stop if placing on someone else's chest
+                    UUID placerID = e.getPlayer().getUniqueId();
                     for (UUID ownerID : chestShopManager.getIDS()) {
-                        if (!ownerID.equals(e.getPlayer().getUniqueId())) {
+                        if (!ownerID.equals(placerID)) {
                             for (ChestShop shop : chestShopManager.getShops(ownerID)) {
                                 if (shop.getChest().equals(chest)) {
                                     e.setCancelled(true);
@@ -45,13 +57,15 @@ public class CreateShopEvents implements Listener {
                         }
                     }
                     // Try to create buy shop
-                    if (sign.getLine(0).equalsIgnoreCase("(buy)")) {
-                        BuyChestShop shop = new BuyChestShop(sign, chest, item, amt, value, e.getPlayer().getUniqueId(), isEnchanted);
+                    if (e.getLine(0).equalsIgnoreCase("(buy)")) {
+                        BuyChestShop shop = new BuyChestShop(sign.getBlock(), chest.getBlock(), item, amt, value, placerID, isEnchanted);
                         chestShopManager.registerShop(shop);
+                        shop.updateSign(Economy.getMoneyExact(placerID));
                         e.getPlayer().sendMessage(ChatColor.GREEN + "Chest shop created!");
-                    } else if (sign.getLine(0).equalsIgnoreCase("(sell)")) {
-                        SellChestShop shop = new SellChestShop(sign, chest, item, amt, value, e.getPlayer().getUniqueId(), isEnchanted);
+                    } else if (e.getLine(0).equalsIgnoreCase("(sell)")) {
+                        SellChestShop shop = new SellChestShop(sign.getBlock(), chest.getBlock(), item, amt, value, placerID, isEnchanted);
                         chestShopManager.registerShop(shop);
+                        shop.updateSign(Economy.getMoneyExact(placerID));
                         e.getPlayer().sendMessage(ChatColor.GREEN + "Chest shop created!");
                     }
                 }

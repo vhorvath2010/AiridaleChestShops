@@ -3,6 +3,7 @@ package io.github.vhorvath2010.airidalechestshops.util;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -15,8 +16,8 @@ import java.util.UUID;
 
 public abstract class ChestShop implements ConfigurationSerializable {
 
-    public Sign sign;
-    public Chest chest;
+    public Block sign;
+    public Block chest;
     public String item;
     public int transactionAmount;
     public double value;
@@ -31,11 +32,17 @@ public abstract class ChestShop implements ConfigurationSerializable {
     }
 
     public Chest getChest() {
-        return chest;
+        if (chest.getState() instanceof Chest) {
+            return (Chest) chest.getState();
+        }
+        return null;
     }
 
     public Sign getSign() {
-        return sign;
+        if (sign.getState() instanceof Sign) {
+            return (Sign) sign.getState();
+        }
+        return null;
     }
 
     // This method will update the sign states
@@ -45,9 +52,14 @@ public abstract class ChestShop implements ConfigurationSerializable {
     public void setSignState(String state) {
         // Get/Set line data
         List<String> lines = new ArrayList<>();
+        Sign sign = getSign();
         for (int lineNum = 0; lineNum < 4; ++lineNum) {
-            sign.setLine(lineNum, MessagingUtils.parsePlaceholders(MessagingUtils.getConfigMsg("formats." + state + "." + lineNum), value, transactionAmount, item, Bukkit.getOfflinePlayer(owner).getName()));
+            String lineMsg = MessagingUtils.parsePlaceholders(MessagingUtils.getConfigMsg("formats." + state + "." + lineNum), value, transactionAmount, item, Bukkit.getOfflinePlayer(owner).getName());
+            sign.setLine(lineNum, lineMsg);
+            System.out.println(lineNum + ": " + lineMsg);
+            System.out.println(sign.getLine(lineNum));
         }
+        sign.update();
     }
 
 }

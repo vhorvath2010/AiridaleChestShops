@@ -20,10 +20,13 @@ public class InventoryUtils {
         FileConfiguration config = AiridaleChestShops.getPlugin().getConfig();
         for (String materialString : config.getConfigurationSection("aliases").getKeys(false)) {
             if (config.contains("aliases." + materialString + "." + type.toLowerCase())) {
-                return Material.valueOf(materialString);
+                return Material.valueOf(materialString.toUpperCase());
             }
         }
-        return Material.valueOf(type);
+        if (Arrays.asList(Material.values()).contains(type.toUpperCase())) {
+            return Material.valueOf(type.toUpperCase());
+        }
+        return null;
     }
 
     // This method will return a custom items name based on its alias
@@ -51,7 +54,7 @@ public class InventoryUtils {
     // This method returns the valid items in an inventory
     public static ItemStack[] getValidItems(Inventory inventory, String target, boolean enchanted) {
         // Create list of items to check in
-        List<ItemStack> items = Arrays.asList(inventory.getStorageContents());
+        ItemStack[] items = inventory.getStorageContents();
         List<ItemStack> validItems = new ArrayList<ItemStack>();
 
         // Count for custom items
@@ -88,7 +91,11 @@ public class InventoryUtils {
                 }
             }
         }
-        return (ItemStack[]) validItems.toArray();
+        ItemStack[] returnItems = new ItemStack[validItems.size()];
+        for (int i = 0; i < returnItems.length; ++i) {
+            returnItems[i] = validItems.get(i);
+        }
+        return returnItems;
     }
 
     // This method transfer a certain number of target items between inventories.

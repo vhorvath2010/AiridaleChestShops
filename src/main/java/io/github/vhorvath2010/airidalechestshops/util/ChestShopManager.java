@@ -74,12 +74,15 @@ public class ChestShopManager {
         // Load buy shops
         if (buyShopFile.exists()) {
             YamlConfiguration buyConfig = new YamlConfiguration();
-            for (String IDString : buyConfig.getConfigurationSection("shops").getKeys(false)) {
-                // Register players shops
-                ArrayList<BuyChestShop> buyShops = (ArrayList<BuyChestShop>) buyConfig.get("shops." + IDString);
-                if (buyShops != null) {
-                    for (ChestShop shop : buyShops) {
-                        registerShop(shop);
+            if (buyConfig.contains("shops")) {
+                for (String IDString : buyConfig.getConfigurationSection("shops").getKeys(false)) {
+                    // Register players shops
+                    ArrayList<BuyChestShop> buyShops = (ArrayList<BuyChestShop>) buyConfig.get("shops." + IDString);
+                    System.out.println(IDString + " has " + buyShops.size() + " shops");
+                    if (buyShops != null) {
+                        for (ChestShop shop : buyShops) {
+                            registerShop(shop);
+                        }
                     }
                 }
             }
@@ -87,12 +90,14 @@ public class ChestShopManager {
         // Load sell shops
         if (sellShopFile.exists()) {
             YamlConfiguration sellConfig = new YamlConfiguration();
-            for (String IDString : sellConfig.getConfigurationSection("shops").getKeys(false)) {
-                // Register players shops
-                ArrayList<SellChestShop> sellShops = (ArrayList<SellChestShop>) sellConfig.get("shops." + IDString);
-                if (sellShops != null) {
-                    for (ChestShop shop : sellShops) {
-                        registerShop(shop);
+            if (sellConfig.getConfigurationSection("shops") != null) {
+                for (String IDString : sellConfig.getConfigurationSection("shops").getKeys(false)) {
+                    // Register players shops
+                    ArrayList<SellChestShop> sellShops = (ArrayList<SellChestShop>) sellConfig.get("shops." + IDString);
+                    if (sellShops != null) {
+                        for (ChestShop shop : sellShops) {
+                            registerShop(shop);
+                        }
                     }
                 }
             }

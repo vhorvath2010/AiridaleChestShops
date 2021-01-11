@@ -6,6 +6,7 @@ import com.earth2me.essentials.api.UserDoesNotExistException;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -18,7 +19,7 @@ import java.util.UUID;
 
 public class BuyChestShop extends ChestShop {
 
-    public BuyChestShop(Sign sign, Chest chest, String item, int amt, double value, UUID owner, boolean enchanted) {
+    public BuyChestShop(Block sign, Block chest, String item, int amt, double value, UUID owner, boolean enchanted) {
         this.sign = sign;
         this.chest = chest;
         this.item = item;
@@ -32,11 +33,11 @@ public class BuyChestShop extends ChestShop {
         // Validate chests and signs:
         Location signLoc = (Location) serializedChestShop.get("signLoc");
         Location chestLoc = (Location) serializedChestShop.get("chestLoc");
-        if (signLoc.getBlock().getType().toString().contains("_SIGN")) {
-            this.sign = (Sign) signLoc.getBlock();
+        if (signLoc.getBlock().getState() instanceof Sign) {
+            this.sign = signLoc.getBlock();
         }
-        if (chestLoc.getBlock().getType() == Material.CHEST) {
-            this.chest = (Chest) chestLoc.getBlock();
+        if (chestLoc.getBlock().getState() instanceof Chest) {
+            this.chest = chestLoc.getBlock();
         }
         // Get other fields
         this.item = (String) serializedChestShop.get("item");
@@ -63,7 +64,7 @@ public class BuyChestShop extends ChestShop {
     @Override
     public void conductTransaction(Player buyer) throws UserDoesNotExistException, NoLoanPermittedException {
         Inventory buyerInv = buyer.getInventory();
-        Inventory shopInv = chest.getBlockInventory();
+        Inventory shopInv = getChest().getInventory();
         // Ensure player has enough money
         if (Economy.getMoneyExact(buyer.getUniqueId()).compareTo(BigDecimal.valueOf(value)) > 0) {
             // Ensure shop has items to sell
@@ -88,7 +89,7 @@ public class BuyChestShop extends ChestShop {
 
     @Override
     public void updateSign(BigDecimal newBalance) {
-        if (InventoryUtils.countItems(chest.getBlockInventory(), item, isEnchanted) < transactionAmount) {
+        if (InventoryUtils.countItems(getChest().getInventory(), item, isEnchanted) < transactionAmount) {
             setSignState("no_item");
             return;
         }

@@ -13,30 +13,30 @@ messages:
 # %owner%: the owner's name
 formats:
   buy:
-    1: "&a(Buy)"
-    2: "%amt%"
-    3: "%item%"
-    4: "%value%"
+    0: "&a(Buy)"
+    1: "%amt%"
+    2: "%item%"
+    3: "%value%"
   sell:
-    1: "&c(Sell)"
-    2: "%amt%"
-    3: "%item%"
-    4: "%value%"
+    0: "&c(Sell)"
+    1: "%amt%"
+    2: "%item%"
+    3: "%value%"
   no_money:
-    1: ""
-    2: "%owner%"
-    3: "&cis out of money!"
-    4: ""
+    0: ""
+    1: "%owner%"
+    2: "&cis out of money!"
+    3: ""
   no_item:
-    1: "%&cowner%"
-    2: "&cis out of"
-    3: "&c%item%!"
-    4: ""
+    0: "%&cowner%"
+    1: "&cis out of"
+    2: "&c%item%!"
+    3: ""
   full:
-    1: ""
-    2: "&cThis shop is"
-    3: "&cfull!!!"
-    4: ""
+    0: ""
+    1: "&cThis shop is"
+    2: "&cfull!!!"
+    3: ""
 
 # Below here are aliases for items. Remember, items are NOT case sensitive, but
 # please use lowercase for aliases and uppercase for the material type / custom item

@@ -6,6 +6,7 @@ import com.earth2me.essentials.api.UserDoesNotExistException;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -18,7 +19,7 @@ import java.util.UUID;
 
 public class SellChestShop extends ChestShop {
 
-    public SellChestShop(Sign sign, Chest chest, String item, int amt, double value, UUID owner, boolean enchanted) {
+    public SellChestShop(Block sign, Block chest, String item, int amt, double value, UUID owner, boolean enchanted) {
         this.sign = sign;
         this.chest = chest;
         this.item = item;
@@ -32,11 +33,11 @@ public class SellChestShop extends ChestShop {
         // Validate chests and signs:
         Location signLoc = (Location) serializedChestShop.get("signLoc");
         Location chestLoc = (Location) serializedChestShop.get("chestLoc");
-        if (signLoc.getBlock().getType().toString().contains("_SIGN")) {
-            this.sign = (Sign) signLoc.getBlock();
+        if (signLoc.getBlock().getState() instanceof Sign) {
+            this.sign = signLoc.getBlock();
         }
-        if (chestLoc.getBlock().getType() == Material.CHEST) {
-            this.chest = (Chest) chestLoc.getBlock();
+        if (chestLoc.getBlock().getState() instanceof Chest) {
+            this.chest = chestLoc.getBlock();
         }
         // Get other fields
         this.item = (String) serializedChestShop.get("item");
@@ -63,7 +64,7 @@ public class SellChestShop extends ChestShop {
     @Override
     public void conductTransaction(Player seller) throws UserDoesNotExistException, NoLoanPermittedException {
         Inventory sellerInv = seller.getInventory();
-        Inventory shopInv = chest.getBlockInventory();
+        Inventory shopInv = getChest().getBlockInventory();
         // Ensure owner has enough money
         if (Economy.getMoneyExact(owner).compareTo(BigDecimal.valueOf(value)) >= 0) {
             // Ensure chest has space
@@ -92,7 +93,7 @@ public class SellChestShop extends ChestShop {
             setSignState("no_money");
             return;
         }
-        if (!InventoryUtils.hasEmpty(chest.getBlockInventory().getStorageContents())) {
+        if (!InventoryUtils.hasEmpty(getChest().getBlockInventory().getStorageContents())) {
             setSignState("full");
             return;
         }
