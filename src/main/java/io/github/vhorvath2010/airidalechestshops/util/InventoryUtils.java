@@ -18,13 +18,15 @@ public class InventoryUtils {
     // This method will return a material based on its alias
     public static Material getMaterial(String type) {
         FileConfiguration config = AiridaleChestShops.getPlugin().getConfig();
-        for (String materialString : config.getConfigurationSection("aliases").getKeys(false)) {
-            if (config.contains("aliases." + materialString + "." + type.toLowerCase())) {
+        for (String materialString : config.getConfigurationSection("aliases.materials").getKeys(false)) {
+            if (config.getList("aliases.materials." + materialString).contains(type.toLowerCase())) {
                 return Material.valueOf(materialString.toUpperCase());
             }
         }
-        if (Arrays.asList(Material.values()).contains(type.toUpperCase())) {
-            return Material.valueOf(type.toUpperCase());
+        for (Material material : Material.values()) {
+            if (material.name().equalsIgnoreCase(type)) {
+                return material;
+            }
         }
         return null;
     }
@@ -32,12 +34,14 @@ public class InventoryUtils {
     // This method will return a custom items name based on its alias
     public static String getCUI(String type) {
         FileConfiguration config = AiridaleChestShops.getPlugin().getConfig();
-        for (String itemString : config.getConfigurationSection("aliases").getKeys(false)) {
-            if (config.contains("aliases." + itemString + "." + type.toLowerCase())) {
-                return itemString;
+        for (String itemString : config.getConfigurationSection("aliases.custom_items").getKeys(false)) {
+            if (config.getList("aliases.custom_items." + itemString).contains(type.toLowerCase())) {
+                return "customitems:" + itemString;
             }
         }
-        return type;
+        if (ItemBridge.getItemStack("customitems:" + type) != null)
+            return "customitems:" + type;
+        return null;
     }
 
     // This method counts the number of "target" items in "inventory"
@@ -63,11 +67,16 @@ public class InventoryUtils {
             for (ItemStack item : items) {
                 if (item != null) {
                     ItemBridgeKey itemKey = ItemBridge.getItemKey(item);
-                    if (itemKey.getItem() != null && itemKey.getItem().equalsIgnoreCase(customItem)) {
+                    if (itemKey.getItem() != null && itemKey.toString().equalsIgnoreCase(customItem)) {
                         validItems.add(item);
                     }
                 }
             }
+            ItemStack[] returnItems = new ItemStack[validItems.size()];
+            for (int i = 0; i < returnItems.length; ++i) {
+                returnItems[i] = validItems.get(i);
+            }
+            return returnItems;
         }
 
         // Otherwise count for regular item
@@ -76,14 +85,18 @@ public class InventoryUtils {
             if (search != null) {
                 for (ItemStack item : items) {
                     if (item != null) {
-                        if (item.getType() == search) {
-                            if (item.getEnchantments().size() == 0) {
-                                if (!enchanted) {
-                                    validItems.add(item);
-                                }
-                            } else {
-                                if(enchanted) {
-                                    validItems.add(item);
+                        // Make sure item isn't a custom item
+                        ItemBridgeKey itemKey = ItemBridge.getItemKey(item);
+                        if (itemKey != null && !itemKey.getNamespace().equalsIgnoreCase("customItems")) {
+                            if (item.getType() == search) {
+                                if (item.getEnchantments().size() == 0) {
+                                    if (!enchanted) {
+                                        validItems.add(item);
+                                    }
+                                } else {
+                                    if (enchanted) {
+                                        validItems.add(item);
+                                    }
                                 }
                             }
                         }

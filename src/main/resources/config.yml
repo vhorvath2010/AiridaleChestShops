@@ -49,12 +49,17 @@ formats:
     3: ""
 
 # Below here are aliases for items. Remember, items are NOT case sensitive, but
-# please use lowercase for aliases and uppercase for the material type / custom item
+# please use lowercase for aliases and uppercase for the material type / CustomItems
 # they represent.
 aliases:
-  IRON_INGOT:
-    - "iron ingot"
-    - "ironingot"
-  DIAMOND_SWORD:
-    - "d sword"
-    - "d_sword"
+  materials:
+    IRON_INGOT:
+      - "iron ingot"
+      - "ironingot"
+    DIAMOND_SWORD:
+      - "d sword"
+      - "d_sword"
+  custom_items:
+    MAGICSTICK:
+      - "magic stick"
+      - "magic_stick"
