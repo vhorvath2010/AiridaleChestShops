@@ -119,8 +119,8 @@ public class InventoryUtils {
             // Otherwise fully transfer item
             else {
                 amt -= item.getAmount();
-                from.remove(item);
-                to.addItem(item);
+                to.addItem(item.clone());
+                item.setAmount(0);
             }
 
         }

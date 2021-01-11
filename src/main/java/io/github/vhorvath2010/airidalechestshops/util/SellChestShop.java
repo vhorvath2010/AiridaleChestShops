@@ -3,6 +3,7 @@ package io.github.vhorvath2010.airidalechestshops.util;
 import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
+import io.github.vhorvath2010.airidalechestshops.AiridaleChestShops;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -72,10 +73,10 @@ public class SellChestShop extends ChestShop {
                 // Ensure player has enough items
                 if (InventoryUtils.countItems(sellerInv, item, isEnchanted) >= transactionAmount) {
                     // Conduct transaction
+                    InventoryUtils.transferItems(sellerInv, shopInv, item, isEnchanted, transactionAmount);
                     Economy.subtract(owner, BigDecimal.valueOf(value));
                     Economy.add(seller.getUniqueId(), BigDecimal.valueOf(value));
-                    InventoryUtils.transferItems(sellerInv, shopInv, item, isEnchanted, transactionAmount);
-                    seller.sendMessage(ChatColor.GREEN + "Purchase complete!");
+                    seller.sendMessage(ChatColor.GREEN + "Sale complete!");
                 } else {
                     seller.sendMessage(ChatColor.RED + "You do not have enough items to sell!");
                 }
