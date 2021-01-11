@@ -2,6 +2,7 @@ package io.github.vhorvath2010.airidalechestshops.events;
 
 import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.UserDoesNotExistException;
+import com.jojodmo.itembridge.ItemBridge;
 import io.github.vhorvath2010.airidalechestshops.AiridaleChestShops;
 import io.github.vhorvath2010.airidalechestshops.util.*;
 import org.bukkit.Bukkit;
@@ -56,6 +57,18 @@ public class CreateShopEvents implements Listener {
                                     return;
                                 }
                             }
+                        }
+                    }
+                    // Stop if stack size is too big
+                    if (InventoryUtils.getMaterial(item) != null) {
+                        if (amt > InventoryUtils.getMaterial(item).getMaxStackSize()) {
+                            e.getPlayer().sendMessage(ChatColor.RED + "That sale size is above the item's stack size!");
+                            return;
+                        }
+                    } else {
+                        if (amt > ItemBridge.getItemStack(InventoryUtils.getCUI(item)).getMaxStackSize()) {
+                            e.getPlayer().sendMessage(ChatColor.RED + "That sale size is above the item's stack size!");
+                            return;
                         }
                     }
                     // Try to create buy shop
