@@ -37,16 +37,16 @@ public class CreateShopEvents implements Listener {
             if (sign.getBlockData() instanceof Directional) {
                  placedOn = sign.getBlock().getRelative(((Directional) sign.getBlockData()).getFacing().getOppositeFace());
             }
-            if ((placedOn.getState() instanceof Chest || placedOn.getState() instanceof Barrel) && e.getLine(2) != null) {
+            if ((placedOn.getState() instanceof Chest || placedOn.getState() instanceof Barrel)) {
                 // Try to create shops
                 String item = e.getLine(2);
                 boolean isEnchanted = item.contains("E ");
                 item = item.replace("E ", "");
-                if (isNumeric(e.getLine(1)) && isNumeric(e.getLine(3)) &&
+                if (isNumeric(e.getLine(1).replace("$", "")) && isNumeric(e.getLine(3)) &&
                         (InventoryUtils.getMaterial(item) != null || InventoryUtils.getCUI(item) != null)) {
                     ChestShopManager chestShopManager = AiridaleChestShops.getPlugin().getChestShopManager();
                     int amt = (int) Double.parseDouble(e.getLine(1));
-                    double value = Double.parseDouble(e.getLine(3));
+                    double value = Double.parseDouble(e.getLine(3).replace("$", ""));
                     // Stop if placing on someone else's chest
                     UUID placerID = e.getPlayer().getUniqueId();
                     for (UUID ownerID : chestShopManager.getIDS()) {
