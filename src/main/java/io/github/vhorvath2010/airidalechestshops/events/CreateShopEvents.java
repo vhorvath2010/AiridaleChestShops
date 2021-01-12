@@ -14,9 +14,11 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.data.Directional;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class CreateShopEvents implements Listener {
@@ -42,22 +44,42 @@ public class CreateShopEvents implements Listener {
                 String item = e.getLine(2);
                 boolean isEnchanted = item.contains("E ");
                 item = item.replace("E ", "");
-                if (isNumeric(e.getLine(1).replace("$", "")) && isNumeric(e.getLine(3)) &&
+                if (isNumeric(e.getLine(1)) && isNumeric(e.getLine(3).replace("$", "")) &&
                         (InventoryUtils.getMaterial(item) != null || InventoryUtils.getCUI(item) != null)) {
                     ChestShopManager chestShopManager = AiridaleChestShops.getPlugin().getChestShopManager();
                     int amt = (int) Double.parseDouble(e.getLine(1));
                     double value = Double.parseDouble(e.getLine(3).replace("$", ""));
-                    // Stop if placing on someone else's chest
+                    // Stop negative values
+                    if (value < 0) {
+                        e.getPlayer().sendMessage(ChatColor.RED + "You may not have negatives on a shop!");
+                        return;
+                    }
+                    // Stop if placing on someone else's chest/find self conflicting
                     UUID placerID = e.getPlayer().getUniqueId();
+                    ArrayList<ChestShop> conflictingShops = new ArrayList<>();
                     for (UUID ownerID : chestShopManager.getIDS()) {
-                        if (!ownerID.equals(placerID)) {
-                            for (ChestShop shop : chestShopManager.getShops(ownerID)) {
-                                if (shop.getContainer().equals(placedOn)) {
-                                    e.setCancelled(true);
-                                    return;
+                        for (ChestShop shop : chestShopManager.getShops(ownerID)) {
+                            if (shop.getContainer().equals(placedOn)) {
+                                // Stop if placing on a valid shop
+                                if ((shop.getBarrel() != null || shop.getChest() != null) && shop.getSign() != null) {
+                                    if (!ownerID.equals(placerID)) {
+                                        e.getPlayer().sendMessage(ChatColor.RED + "You cannot place a shop on someone else's shop!");
+                                        e.setCancelled(true);
+                                        return;
+                                    }
+                                }
+                                // Check for conflicting shop
+                                else {
+                                    if (shop.getSignBlock().getLocation().equals(signBlock.getLocation()) && shop.getContainer().getLocation().equals(placedOn.getLocation())) {
+                                        conflictingShops.add(shop);
+                                    }
                                 }
                             }
                         }
+                    }
+                    // Remove conflicting shops
+                    for (ChestShop shop : conflictingShops) {
+                        chestShopManager.removeShop(shop);
                     }
                     // Stop if stack size is too big
                     if (InventoryUtils.getMaterial(item) != null) {
@@ -103,6 +125,26 @@ public class CreateShopEvents implements Listener {
                     }
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlace(BlockPlaceEvent e) {
+        ArrayList<ChestShop> invalidShops = new ArrayList<>();
+        ChestShopManager chestShopManager = AiridaleChestShops.getPlugin().getChestShopManager();
+        for (UUID ownerID : chestShopManager.getIDS()) {
+            for (ChestShop shop : chestShopManager.getShops(ownerID)) {
+                if (shop.getSignBlock() == null || shop.getContainer() == null) {
+                    invalidShops.add(shop);
+                    continue;
+                }
+                if (shop.getSignBlock().getLocation().equals(e.getBlock().getLocation()) || shop.getContainer().getLocation().equals(e.getBlock().getLocation())) {
+                    invalidShops.add(shop);
+                }
+            }
+        }
+        for (ChestShop shop : invalidShops) {
+            chestShopManager.removeShop(shop);
         }
     }
 
