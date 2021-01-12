@@ -6,7 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.*;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -21,7 +22,7 @@ public class ProtectionEvents implements Listener {
             ArrayList<ChestShop> toRemove = new ArrayList<>();
             for (UUID shopPlayerID : AiridaleChestShops.getPlugin().getChestShopManager().getIDS()) {
                 // Stop break if not owner
-                if (!e.getPlayer().getUniqueId().equals(shopPlayerID)) {
+                if (!e.getPlayer().getUniqueId().equals(shopPlayerID) && !e.getPlayer().hasPermission("shop.admin")) {
                     for (ChestShop shop : AiridaleChestShops.getPlugin().getChestShopManager().getShops(shopPlayerID)) {
                         if (shop.getContainer().equals(broken) || shop.getSign().getBlock().equals(broken)) {
                             e.setCancelled(true);
@@ -40,6 +41,60 @@ public class ProtectionEvents implements Listener {
             // Unregister all broken shops
             for (ChestShop shop : toRemove) {
                 AiridaleChestShops.getPlugin().getChestShopManager().removeShop(shop);
+            }
+        }
+    }
+
+    @EventHandler
+    public void breakChest(BlockBurnEvent e) {
+        Block broken = e.getBlock();
+        if (!e.isCancelled()) {
+            // Check all sign shops for consequences
+            ArrayList<ChestShop> toRemove = new ArrayList<>();
+            for (UUID shopPlayerID : AiridaleChestShops.getPlugin().getChestShopManager().getIDS()) {
+                // Stop burns
+                for (ChestShop shop : AiridaleChestShops.getPlugin().getChestShopManager().getShops(shopPlayerID)) {
+                    if (shop.getContainer().equals(broken) || shop.getSign().getBlock().equals(broken)) {
+                        e.setCancelled(true);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void breakChest(BlockExplodeEvent e) {
+        Block broken = e.getBlock();
+        if (!e.isCancelled()) {
+            // Check all sign shops for consequences
+            ArrayList<ChestShop> toRemove = new ArrayList<>();
+            for (UUID shopPlayerID : AiridaleChestShops.getPlugin().getChestShopManager().getIDS()) {
+                // Stop burns
+                for (ChestShop shop : AiridaleChestShops.getPlugin().getChestShopManager().getShops(shopPlayerID)) {
+                    if (shop.getContainer().equals(broken) || shop.getSign().getBlock().equals(broken)) {
+                        e.setCancelled(true);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void openShop(PlayerInteractEvent e) {
+        if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            Block clicked = e.getClickedBlock();
+            for (UUID shopPlayerID : AiridaleChestShops.getPlugin().getChestShopManager().getIDS()) {
+                // Stop break if not owner
+                if (!e.getPlayer().getUniqueId().equals(shopPlayerID) && !e.getPlayer().hasPermission("shop.admin")) {
+                    for (ChestShop shop : AiridaleChestShops.getPlugin().getChestShopManager().getShops(shopPlayerID)) {
+                        if (shop.getContainer().equals(clicked)) {
+                            e.setCancelled(true);
+                            return;
+                        }
+                    }
+                }
             }
         }
     }

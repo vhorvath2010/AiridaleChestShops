@@ -64,6 +64,12 @@ public abstract class ChestShop implements ConfigurationSerializable {
 
     // This method will set the lines of the shop to a certain config section
     public void setSignState(String state) {
+        if (sign == null) {
+            return;
+        }
+        if (!(sign.getState() instanceof Sign)){
+            return;
+        }
         // Get/Set line data
         List<String> lines = new ArrayList<>();
         Sign sign = getSign();

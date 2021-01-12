@@ -21,8 +21,7 @@ public class TransactionEvents implements Listener {
             ChestShopManager chestShopManager = AiridaleChestShops.getPlugin().getChestShopManager();
             for (UUID ownerID : chestShopManager.getIDS()) {
                 for (ChestShop shop : chestShopManager.getShops(ownerID)) {
-                    // ADD CHECK TO ENSURE THE PLAYER ISN'T THE OWNER
-                    if (shop.getSign().getBlock().equals(clicked)) {
+                    if (!ownerID.equals(e.getPlayer().getUniqueId()) && shop.getSign().getBlock().equals(clicked)) {
                         shop.conductTransaction(e.getPlayer());
                     }
                 }
