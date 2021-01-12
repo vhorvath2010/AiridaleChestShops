@@ -83,13 +83,13 @@ public class CreateShopEvents implements Listener {
                     }
                     // Stop if stack size is too big
                     if (InventoryUtils.getMaterial(item) != null) {
-                        if (amt > InventoryUtils.getMaterial(item).getMaxStackSize()) {
-                            e.getPlayer().sendMessage(ChatColor.RED + "That sale size is above the item's stack size!");
+                        if (amt < 1 || amt > InventoryUtils.getMaterial(item).getMaxStackSize()) {
+                            e.getPlayer().sendMessage(ChatColor.RED + "That sale size isn't within the item's stack size!");
                             return;
                         }
                     } else {
-                        if (amt > ItemBridge.getItemStack(InventoryUtils.getCUI(item)).getMaxStackSize()) {
-                            e.getPlayer().sendMessage(ChatColor.RED + "That sale size is above the item's stack size!");
+                        if (amt < 1 || amt > ItemBridge.getItemStack(InventoryUtils.getCUI(item)).getMaxStackSize()) {
+                            e.getPlayer().sendMessage(ChatColor.RED + "That sale size isn't within the item's stack size!");
                             return;
                         }
                     }
