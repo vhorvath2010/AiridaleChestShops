@@ -18,6 +18,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -54,6 +56,8 @@ public class CreateShopEvents implements Listener {
                         e.getPlayer().sendMessage(ChatColor.RED + "You may not have negatives on a shop!");
                         return;
                     }
+                    // Round value
+                    value = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
                     // Stop if placing on someone else's chest/find self conflicting
                     UUID placerID = e.getPlayer().getUniqueId();
                     ArrayList<ChestShop> conflictingShops = new ArrayList<>();
