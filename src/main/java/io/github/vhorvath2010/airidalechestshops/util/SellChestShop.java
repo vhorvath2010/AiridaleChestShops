@@ -96,6 +96,9 @@ public class SellChestShop extends ChestShop {
     @Override
     public void updateSign(BigDecimal newBalance) throws UserDoesNotExistException {
         Inventory shopInv;
+        if (!isValid()) {
+            return;
+        }
         if (getChest() != null) {
             shopInv = getChest().getInventory();
         } else {

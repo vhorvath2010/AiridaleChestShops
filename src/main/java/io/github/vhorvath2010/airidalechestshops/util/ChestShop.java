@@ -31,7 +31,7 @@ public abstract class ChestShop implements ConfigurationSerializable {
 
     // This method will return true if the sign and chest for a shop still exist
     public boolean isValid() {
-        return sign == null || chest == null;
+        return (sign != null && chest != null);
     }
 
     public Chest getChest() {

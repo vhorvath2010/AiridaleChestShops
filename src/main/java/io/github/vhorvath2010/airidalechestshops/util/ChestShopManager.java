@@ -54,10 +54,12 @@ public class ChestShopManager {
             ArrayList<BuyChestShop> buyShops = new ArrayList<>();
             // Add player's shops to proper list
             for (ChestShop shop : activeShops.get(id)) {
-                if (shop instanceof BuyChestShop) {
-                    buyShops.add((BuyChestShop) shop);
-                } else {
-                    sellShops.add((SellChestShop) shop);
+                if (shop.isValid()) {
+                    if (shop instanceof BuyChestShop) {
+                        buyShops.add((BuyChestShop) shop);
+                    } else {
+                        sellShops.add((SellChestShop) shop);
+                    }
                 }
             }
             // Save lists
