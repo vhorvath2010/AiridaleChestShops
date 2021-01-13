@@ -21,20 +21,10 @@ public class ProtectionEvents implements Listener {
             // Check all sign shops for consequences
             ArrayList<ChestShop> toRemove = new ArrayList<>();
             for (UUID shopPlayerID : AiridaleChestShops.getPlugin().getChestShopManager().getIDS()) {
-                // Stop break if not owner
-                if (!e.getPlayer().getUniqueId().equals(shopPlayerID) && !e.getPlayer().hasPermission("shop.admin")) {
-                    for (ChestShop shop : AiridaleChestShops.getPlugin().getChestShopManager().getShops(shopPlayerID)) {
-                        if (shop.getContainer().equals(broken) || shop.getSign().getBlock().equals(broken)) {
-                            e.setCancelled(true);
-                            return;
-                        }
-                    }
-                } else {
-                    // Otherwise, unregister shop
-                    for (ChestShop shop : AiridaleChestShops.getPlugin().getChestShopManager().getShops(shopPlayerID)) {
-                        if (shop.getContainer().equals(broken) || shop.getSign().getBlock().equals(broken)) {
-                            toRemove.add(shop);
-                        }
+                // unregister broken shop
+                for (ChestShop shop : AiridaleChestShops.getPlugin().getChestShopManager().getShops(shopPlayerID)) {
+                    if (shop != null && shop.isValid() && (shop.getContainer().equals(broken) || shop.getSign().getBlock().equals(broken))) {
+                        toRemove.add(shop);
                     }
                 }
             }
@@ -46,33 +36,15 @@ public class ProtectionEvents implements Listener {
     }
 
     @EventHandler
-    public void breakChest(BlockBurnEvent e) {
-        Block broken = e.getBlock();
-        if (!e.isCancelled()) {
-            // Check all sign shops for consequences
-            ArrayList<ChestShop> toRemove = new ArrayList<>();
-            for (UUID shopPlayerID : AiridaleChestShops.getPlugin().getChestShopManager().getIDS()) {
-                // Stop burns
-                for (ChestShop shop : AiridaleChestShops.getPlugin().getChestShopManager().getShops(shopPlayerID)) {
-                    if (shop.getContainer().equals(broken) || shop.getSign().getBlock().equals(broken)) {
-                        e.setCancelled(true);
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    @EventHandler
     public void breakChest(BlockExplodeEvent e) {
         Block broken = e.getBlock();
         if (!e.isCancelled()) {
             // Check all sign shops for consequences
             ArrayList<ChestShop> toRemove = new ArrayList<>();
             for (UUID shopPlayerID : AiridaleChestShops.getPlugin().getChestShopManager().getIDS()) {
-                // Stop burns
+                // Stop explosions
                 for (ChestShop shop : AiridaleChestShops.getPlugin().getChestShopManager().getShops(shopPlayerID)) {
-                    if (shop.getContainer().equals(broken) || shop.getSign().getBlock().equals(broken)) {
+                    if (shop != null && shop.isValid() && (shop.getContainer().equals(broken) || shop.getSign().getBlock().equals(broken))) {
                         e.setCancelled(true);
                         return;
                     }
@@ -85,11 +57,14 @@ public class ProtectionEvents implements Listener {
     public void openShop(PlayerInteractEvent e) {
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Block clicked = e.getClickedBlock();
+            if (clicked == null) {
+                return;
+            }
             for (UUID shopPlayerID : AiridaleChestShops.getPlugin().getChestShopManager().getIDS()) {
-                // Stop break if not owner
+                // Stop open if not owner
                 if (!e.getPlayer().getUniqueId().equals(shopPlayerID) && !e.getPlayer().hasPermission("shop.admin")) {
                     for (ChestShop shop : AiridaleChestShops.getPlugin().getChestShopManager().getShops(shopPlayerID)) {
-                        if (shop.getContainer().equals(clicked)) {
+                        if (shop != null && shop.isValid() && shop.getContainer().equals(clicked)) {
                             e.setCancelled(true);
                             return;
                         }

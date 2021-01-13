@@ -94,6 +94,9 @@ public class BuyChestShop extends ChestShop {
 
     @Override
     public void updateSign(BigDecimal newBalance) {
+        if (!isValid()) {
+            return;
+        }
         Inventory shopInv;
         if (getChest() != null) {
             shopInv = getChest().getInventory();

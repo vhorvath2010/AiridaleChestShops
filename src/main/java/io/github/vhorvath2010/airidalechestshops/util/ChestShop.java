@@ -35,14 +35,14 @@ public abstract class ChestShop implements ConfigurationSerializable {
     }
 
     public Chest getChest() {
-        if (chest.getState() instanceof Chest) {
+        if (isValid() && chest.getState() instanceof Chest) {
             return (Chest) chest.getState();
         }
         return null;
     }
 
     public Barrel getBarrel() {
-        if (chest.getState() instanceof Barrel) {
+        if (isValid() && chest.getState() instanceof Barrel) {
             return (Barrel) chest.getState();
         }
         return null;
@@ -53,14 +53,17 @@ public abstract class ChestShop implements ConfigurationSerializable {
     }
 
     public Sign getSign() {
-        if (sign.getState() instanceof Sign) {
+        if (isValid() && sign.getState() instanceof Sign) {
             return (Sign) sign.getState();
         }
         return null;
     }
 
     public Block getSignBlock() {
-        return sign;
+        if (isValid()) {
+            return sign;
+        }
+        return null;
     }
 
     // This method will update the sign states
@@ -68,7 +71,7 @@ public abstract class ChestShop implements ConfigurationSerializable {
 
     // This method will set the lines of the shop to a certain config section
     public void setSignState(String state) {
-        if (sign == null) {
+        if (!isValid()) {
             return;
         }
         if (!(sign.getState() instanceof Sign)){
