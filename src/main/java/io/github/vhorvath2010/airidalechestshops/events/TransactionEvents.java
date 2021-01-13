@@ -23,6 +23,7 @@ public class TransactionEvents implements Listener {
                 for (ChestShop shop : chestShopManager.getShops(ownerID)) {
                     if (!ownerID.equals(e.getPlayer().getUniqueId()) && shop.getSign().getBlock().equals(clicked)) {
                         shop.conductTransaction(e.getPlayer());
+                        return;
                     }
                 }
             }
