@@ -3,7 +3,10 @@ package io.github.vhorvath2010.airidalechestshops.events;
 import io.github.vhorvath2010.airidalechestshops.AiridaleChestShops;
 import io.github.vhorvath2010.airidalechestshops.util.ChestShop;
 import org.bukkit.Material;
+import org.bukkit.block.Barrel;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
+import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
@@ -17,7 +20,7 @@ public class ProtectionEvents implements Listener {
     @EventHandler
     public void breakChest(BlockBreakEvent e) {
         Block broken = e.getBlock();
-        if (!e.isCancelled()) {
+        if (!e.isCancelled() && (broken.getState() instanceof Chest || broken.getState() instanceof Barrel || broken.getState() instanceof Sign)) {
             // Check all sign shops for consequences
             ArrayList<ChestShop> toRemove = new ArrayList<>();
             for (UUID shopPlayerID : AiridaleChestShops.getPlugin().getChestShopManager().getIDS()) {
@@ -38,7 +41,7 @@ public class ProtectionEvents implements Listener {
     @EventHandler
     public void breakChest(BlockExplodeEvent e) {
         Block broken = e.getBlock();
-        if (!e.isCancelled()) {
+        if (!e.isCancelled() && (broken.getState() instanceof Chest || broken.getState() instanceof Barrel || broken.getState() instanceof Sign)) {
             // Check all sign shops for consequences
             ArrayList<ChestShop> toRemove = new ArrayList<>();
             for (UUID shopPlayerID : AiridaleChestShops.getPlugin().getChestShopManager().getIDS()) {
@@ -60,17 +63,20 @@ public class ProtectionEvents implements Listener {
             if (clicked == null) {
                 return;
             }
-            for (UUID shopPlayerID : AiridaleChestShops.getPlugin().getChestShopManager().getIDS()) {
-                // Stop open if not owner
-                if (!e.getPlayer().getUniqueId().equals(shopPlayerID) && !e.getPlayer().hasPermission("shop.admin")) {
-                    for (ChestShop shop : AiridaleChestShops.getPlugin().getChestShopManager().getShops(shopPlayerID)) {
-                        if (shop != null && shop.isValid() && shop.getContainer().equals(clicked)) {
-                            e.setCancelled(true);
-                            return;
+            if ((clicked.getState() instanceof Chest || clicked.getState() instanceof Barrel)) {
+                for (UUID shopPlayerID : AiridaleChestShops.getPlugin().getChestShopManager().getIDS()) {
+                    // Stop open if not owner
+                    if (!e.getPlayer().getUniqueId().equals(shopPlayerID) && !e.getPlayer().hasPermission("shop.admin")) {
+                        for (ChestShop shop : AiridaleChestShops.getPlugin().getChestShopManager().getShops(shopPlayerID)) {
+                            if (shop != null && shop.isValid() && shop.getContainer().equals(clicked)) {
+                                e.setCancelled(true);
+                                return;
+                            }
                         }
                     }
                 }
             }
+
         }
     }
 
