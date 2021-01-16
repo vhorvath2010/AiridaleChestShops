@@ -92,12 +92,14 @@ public class ChestShopManager {
         if (sellShopFile.exists()) {
             YamlConfiguration sellConfig = new YamlConfiguration();
             sellConfig.load(sellShopFile);
-            for (String IDString : sellConfig.getConfigurationSection("shops").getKeys(false)) {
-                // Register players shops
-                ArrayList<SellChestShop> sellShops = (ArrayList<SellChestShop>) sellConfig.get("shops." + IDString);
-                if (sellShops != null) {
-                    for (ChestShop shop : sellShops) {
-                        registerShop(shop);
+            if (sellConfig.getConfigurationSection("shops") != null) {
+                for (String IDString : sellConfig.getConfigurationSection("shops").getKeys(false)) {
+                    // Register players shops
+                    ArrayList<SellChestShop> sellShops = (ArrayList<SellChestShop>) sellConfig.get("shops." + IDString);
+                    if (sellShops != null) {
+                        for (ChestShop shop : sellShops) {
+                            registerShop(shop);
+                        }
                     }
                 }
             }

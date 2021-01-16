@@ -92,6 +92,11 @@ public class CreateShopEvents implements Listener {
                             return;
                         }
                     } else {
+                        // Stop if ItemBridge item doesn't exist
+                        if (ItemBridge.getItemStack(InventoryUtils.getCUI(item)) == null) {
+                            e.getPlayer().sendMessage(ChatColor.RED + "Custom Item not found!");
+                            return;
+                        }
                         if (amt < 1 || amt > ItemBridge.getItemStack(InventoryUtils.getCUI(item)).getMaxStackSize()) {
                             e.getPlayer().sendMessage(ChatColor.RED + "That sale size isn't within the item's stack size!");
                             return;
