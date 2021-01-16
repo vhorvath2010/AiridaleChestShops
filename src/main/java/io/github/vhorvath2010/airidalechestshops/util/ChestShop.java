@@ -2,6 +2,7 @@ package io.github.vhorvath2010.airidalechestshops.util;
 
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
+import com.sun.istack.internal.Nullable;
 import io.github.vhorvath2010.airidalechestshops.AiridaleChestShops;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,15 +35,18 @@ public abstract class ChestShop implements ConfigurationSerializable {
         return (sign != null && chest != null && getSign() != null && (getChest() != null || getBarrel() != null));
     }
 
+    @Nullable
     public Chest getChest() {
-        if (isValid() && chest.getState() instanceof Chest) {
+        if (chest != null && chest.getState() instanceof Chest) {
             return (Chest) chest.getState();
         }
         return null;
     }
 
+
+    @Nullable
     public Barrel getBarrel() {
-        if (isValid() && chest.getState() instanceof Barrel) {
+        if (chest != null && chest.getState() instanceof Barrel) {
             return (Barrel) chest.getState();
         }
         return null;
@@ -52,15 +56,17 @@ public abstract class ChestShop implements ConfigurationSerializable {
         return chest;
     }
 
+    @Nullable
     public Sign getSign() {
-        if (isValid() && sign.getState() instanceof Sign) {
+        if (sign != null && sign.getState() instanceof Sign) {
             return (Sign) sign.getState();
         }
         return null;
     }
 
+    @Nullable
     public Block getSignBlock() {
-        if (isValid()) {
+        if (sign != null) {
             return sign;
         }
         return null;

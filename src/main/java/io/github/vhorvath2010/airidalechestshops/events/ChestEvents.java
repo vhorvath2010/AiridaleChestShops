@@ -7,7 +7,6 @@ import io.github.vhorvath2010.airidalechestshops.util.ChestShop;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
 import java.util.UUID;

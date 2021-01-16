@@ -2,7 +2,6 @@ package io.github.vhorvath2010.airidalechestshops.events;
 
 import io.github.vhorvath2010.airidalechestshops.AiridaleChestShops;
 import io.github.vhorvath2010.airidalechestshops.util.ChestShop;
-import org.bukkit.Material;
 import org.bukkit.block.Barrel;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
