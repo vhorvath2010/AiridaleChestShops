@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -71,14 +72,14 @@ public class BuyChestShop extends ChestShop {
             shopInv = getBarrel().getInventory();
         }
         // Ensure player has enough money
-        if (Economy.getMoneyExact(buyer.getUniqueId()).compareTo(BigDecimal.valueOf(value)) > 0) {
+        if (Economy.getMoneyExact(buyer.getUniqueId()).compareTo(BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP)) >= 0) {
             // Ensure shop has items to sell
             if (InventoryUtils.countItems(shopInv, item, isEnchanted) >= transactionAmount) {
                 // Ensure player has space
                 if (InventoryUtils.hasEmpty(buyer.getInventory().getStorageContents())) {
                     // Conduct transaction
-                    Economy.subtract(buyer.getUniqueId(), BigDecimal.valueOf(value));
-                    Economy.add(owner, BigDecimal.valueOf(value));
+                    Economy.subtract(buyer.getUniqueId(), BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP));
+                    Economy.add(owner, BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP));
                     InventoryUtils.transferItems(shopInv, buyerInv, item, isEnchanted, transactionAmount);
                     buyer.sendMessage(ChatColor.GREEN + "Purchase complete!");
                 } else {
