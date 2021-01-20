@@ -6,6 +6,7 @@ import com.earth2me.essentials.api.UserDoesNotExistException;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Barrel;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
@@ -37,7 +38,7 @@ public class BuyChestShop extends ChestShop {
         if (signLoc.getBlock().getState() instanceof Sign) {
             this.sign = signLoc.getBlock();
         }
-        if (chestLoc.getBlock().getState() instanceof Chest) {
+        if (chestLoc.getBlock().getState() instanceof Chest || chestLoc.getBlock().getState() instanceof Barrel) {
             this.chest = chestLoc.getBlock();
         }
         // Get other fields
