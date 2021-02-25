@@ -2,7 +2,6 @@ package io.github.vhorvath2010.airidalechestshops.util;
 
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
-import com.sun.istack.internal.Nullable;
 import io.github.vhorvath2010.airidalechestshops.AiridaleChestShops;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,6 +11,7 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
